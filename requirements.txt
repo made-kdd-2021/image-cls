@@ -1,2 +1,9 @@
 tzlocal
 pyyaml
+pytorch-lightning~=1.4.9
+hydra-core~=1.1.1
+torchmetrics~=0.5.1
+matplotlib~=3.4
+-f https://download.pytorch.org/whl/torch_stable.html
+torchvision==0.10.1+cu111
+torch==1.9.1+cu111 

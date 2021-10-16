@@ -1,0 +1,12 @@
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+defaults:
+  - optimizer: adam
+  - model: mobilenetv3_small
+  - scheduler: multistep
+  - loss: nll_loss
+  - _self_
+
