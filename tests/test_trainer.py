@@ -3,7 +3,6 @@ from unittest import mock
 from hydra import compose, initialize, utils
 
 from training import PneumoniaClsTrainer
-from training.test_logger import PyTestLogger
 
 from .conftest import CONFIG_PATH
 

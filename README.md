@@ -8,6 +8,8 @@
 
 ## Как запустить
 
+### Зависимости
+
 Установить зависимости:
 ```
 pip install -r. /requirements.txt -r ./requirements.dev.txt
@@ -18,17 +20,22 @@ pip install -r. /requirements.txt -r ./requirements.dev.txt
 dvc pull
 ```
 
-При наличии GPU установить PyTorch:
+Установка PyTorch с GPU:
 ```
 pip install -r ./requirements.gpu.txt
 ```
 
-Для запуска только на CPU:
+PyTorch с CPU только:
 ```
 pip install -r ./requirements.cpu.txt
 ```
 
-Запуск тестов:
+### Запуск обучения
 ```
- pytest --cov=model --cov=training ./tests
+dvc repro train
+```
+
+### Запуск тестов:
+```
+pytest --cov=model --cov=training ./tests
 ```
