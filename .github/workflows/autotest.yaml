@@ -1,0 +1,52 @@
+name: Test main code
+
+on:
+  push:
+    branches: [master, develop]
+    paths:
+      - '**.py'
+      - 'configs/**'
+      - log_settings.yaml
+      - requirements*.txt
+      - dvc.yaml
+      - dvc.lock
+  pull_request:
+    branches: [master, develop]
+    paths:
+      - '**.py'
+      - 'configs/**'
+      - log_settings.yaml
+      - requirements*.txt
+      - dvc.yaml
+      - dvc.lock
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Cache pip dependecies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          pip install wheel
+          pip install -r requirements.txt -r requirements.dev.txt -r requirements.cpu.txt
+
+
+      - name: Test with pytest
+        run: pytest --cov=model --cov=training ./tests

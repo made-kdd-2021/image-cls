@@ -1,0 +1,37 @@
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+defaults:
+  - optimizer: adam
+  - model: mobilenetv3_small
+  - scheduler: multistep
+  - loss: nll_loss
+  - _self_
+
+exp_dir: ./exp/pneumonia_cls
+
+model_trainer:
+  _target_: training.trainer.PneumoniaClsTrainer
+  optimizer_config: ${optimizer}
+  loss_module: ${loss}
+  class_labels: ['0', '1']
+  scheduler_config: ${scheduler}
+  unfreeze_after_epoch: 4
+
+trainer:
+  _target_: pytorch_lightning.trainer.trainer.Trainer
+  amp_backend: 'native'
+  benchmark: true
+  gpus: 1
+  deterministic: false
+  log_every_n_steps: 50
+  precision: 16
+  max_epochs: 100
+  check_val_every_n_epoch: 5
+  default_root_dir: ${exp_dir}
+  logger:
+    _target_: pytorch_lightning.loggers.tensorboard.TensorBoardLogger
+    save_dir: ${exp_dir}/logs
+

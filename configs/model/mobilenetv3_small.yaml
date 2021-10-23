@@ -1,0 +1,2 @@
+_target_: model.cls_model.PneumoniaMobileNetV3
+num_classes: 2

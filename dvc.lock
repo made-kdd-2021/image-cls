@@ -1,0 +1,41 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python ./train.py -cd ./configs
+    deps:
+    - path: ./configs/training.yaml
+      md5: 045e5e10d0fb8c8d99dc45c5fcc56486
+      size: 804
+    - path: ./model/cls_model.py
+      md5: dd6af8598a7529f99d44f232c1a0a589
+      size: 1391
+    - path: ./train.py
+      md5: 5e583b538129f2898d384f2c23c5ae9b
+      size: 543
+    - path: ./training/loss.py
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: ./training/trainer.py
+      md5: b7334e123daa6349aa8a9410fdaddbc6
+      size: 5826
+    params:
+      configs/optimizer/adam.yaml:
+        amsgrad: true
+        betas:
+        - 0.9
+        - 0.999
+        lr: 0.0001
+        weight_decay: 0.0001
+      configs/scheduler/multistep.yaml:
+        gamma: 0.1
+        milestones:
+        - 120
+        - 160
+      configs/training.yaml:
+        model_trainer.unfreeze_after_epoch: 4
+        trainer.amp_backend: native
+        trainer.benchmark: true
+        trainer.check_val_every_n_epoch: 5
+        trainer.deterministic: false
+        trainer.max_epochs: 100
+        trainer.precision: 16

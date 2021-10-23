@@ -13,7 +13,7 @@ handlers:
     formatter: default_console_thread
     stream: ext://sys.stdout
 loggers:
-  custom:
+  trainer:
     level: DEBUG
     handlers: [console]
     propagate: no

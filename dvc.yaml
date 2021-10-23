@@ -1,0 +1,26 @@
+stages:
+  train:
+    cmd: python ./train.py -cd ./configs
+    params:
+      - ./configs/optimizer/adam.yaml:
+          - lr
+          - betas
+          - amsgrad
+          - weight_decay
+      - ./configs/scheduler/multistep.yaml:
+          - milestones
+          - gamma
+      - ./configs/training.yaml:
+          - model_trainer.unfreeze_after_epoch
+          - trainer.amp_backend
+          - trainer.benchmark
+          - trainer.deterministic
+          - trainer.precision
+          - trainer.max_epochs
+          - trainer.check_val_every_n_epoch
+    deps:
+      - ./train.py
+      - ./configs/training.yaml
+      - ./model/cls_model.py
+      - ./training/loss.py
+      - ./training/trainer.py
