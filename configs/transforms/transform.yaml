@@ -2,7 +2,7 @@ train_transform:
   _target_: torch.nn.Sequential
   _args_:
     - _target_: transforms.transforms.ResizeWithPadding
-      max_size: 600
+      max_size: 200
       aspect_ratio: 1.6
       fill_value: 0
       padding_mode: "constant"
@@ -21,6 +21,11 @@ train_transform:
 test_transform:
   _target_: torch.nn.Sequential
   _args_:
+    - _target_: transforms.transforms.ResizeWithPadding
+      max_size: 600
+      aspect_ratio: 1.6
+      fill_value: 0
+      padding_mode: "constant"
     - _target_: torchvision.transforms.ConvertImageDtype
       dtype:
         _target_: transforms.transforms.get_dtype

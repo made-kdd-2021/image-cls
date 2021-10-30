@@ -6,6 +6,7 @@ import torch
 from model import PneumoniaMobileNetV3
 
 CONFIG_PATH = os.path.join("..", "configs")
+TEST_DATA_DIR = os.path.join("data", "raw", "small-subset-chest_xray")
 
 
 @pytest.fixture(scope="session")
@@ -17,7 +18,7 @@ def image_batch():
 @pytest.fixture(scope="session")
 def image_batch_info():
     generator = torch.Generator().manual_seed(122)
-    return {"images": torch.rand((2, 3, 64, 64), generator=generator), "labels": torch.ones(2, dtype=torch.long)}
+    return {"image": torch.rand((2, 3, 64, 64), generator=generator), "label": torch.ones(2, dtype=torch.long)}
 
 
 @ pytest.fixture(scope="session")

@@ -37,6 +37,11 @@ class PneumoniaMobileNetV3(nn.Module):
         """
         return F.softmax(self.forward(images), dim=-1)
 
+    def predict_proba_postive_class(self, images):
+        """Predict probability of class
+        """
+        return F.softmax(self.forward(images), dim=-1)[:, 1]
+
     def predict_class(self, images):
         """Predict class label
         """
