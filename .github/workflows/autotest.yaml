@@ -22,7 +22,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-20.04
 
     steps:
@@ -60,10 +60,13 @@ jobs:
             gdrive_service_account_json_file_path = ${{ github.workspace }}/.dvc/secret.json
           EOF
 
-          dvc pull -v ./data/raw/small-subset-chest_xray.dvc
+          dvc pull ./data/raw/small-subset-chest_xray.dvc
 
       - name: Test with pytest
         run: pytest --cov=model --cov=training ./tests
+
+      - name: Run test train
+        run: dvc repro fast-test
 
       
 
