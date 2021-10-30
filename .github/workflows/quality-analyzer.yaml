@@ -9,7 +9,7 @@ on:
       - log_settings.yaml
       - requirements*.txt
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master ]
     paths:
       - '**.py'
       - 'configs/**'

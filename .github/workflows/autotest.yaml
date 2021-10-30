@@ -36,7 +36,9 @@ jobs:
       - name: Cache pip dependecies
         uses: actions/cache@v2
         with:
-          path: ~/.cache/pip
+          path: |
+            ~/.cache/pip
+            ${{ github.workspace }}/.dvc/cache
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements*txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
@@ -52,10 +54,10 @@ jobs:
         env:
           DVC_SECRET: ${{ secrets.DVC_DATA_SECRET }}
         run: |
-          echo ${DVC_SECRET} > ./secret.json
+          echo ${DVC_SECRET} > ${{ github.workspace }}/.dvc/secret.json
           cat << EOF > ./.dvc/config.local
           ['remote "storage"']
-            gdrive_service_account_json_file_path = ./secret.json
+            gdrive_service_account_json_file_path = ${{ github.workspace }}/.dvc/secret.json
           EOF
 
           dvc pull -v ./data/raw/small-subset-chest_xray.dvc
