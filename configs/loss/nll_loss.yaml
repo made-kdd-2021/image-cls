@@ -1,2 +1,2 @@
-_target_: torch.nn.NLLLoss
+_target_: torch.nn.CrossEntropyLoss
 reduction: 'sum'
