@@ -19,9 +19,9 @@ datamodule:
   train_batch_size: 64
   test_batch_size: 128
   val_batch_size: 128
-  train_load_workers: 1
-  test_load_workers: 1
-  val_load_workers: 1
+  train_load_workers: 2
+  test_load_workers: 2
+  val_load_workers: 2
   class_mapping:
     PNEUMONIA: 1
     NORMAL: 0
@@ -32,7 +32,7 @@ model_trainer:
   loss_module: ${loss}
   class_labels: ['NORMAL', 'PNEUMONIA']
   scheduler_config: ${scheduler}
-  unfreeze_after_epoch: 4
+  unfreeze_after_epoch: 5
 
 trainer:
   _target_: pytorch_lightning.trainer.trainer.Trainer
@@ -42,9 +42,9 @@ trainer:
   deterministic: false
   log_every_n_steps: 50
   precision: 16
-  max_epochs: 100
+  max_epochs: 10
   fast_dev_run: false
-  check_val_every_n_epoch: 5
+  check_val_every_n_epoch: 2
   default_root_dir: ${exp_dir}
   logger:
     _target_: pytorch_lightning.loggers.tensorboard.TensorBoardLogger
@@ -55,6 +55,6 @@ trainer:
       save_last: true
       save_top_k: 2
       mode: 'max'
-      every_n_epochs: 4
+      every_n_epochs: 3
       monitor: Valid/AUC_ROC
 
