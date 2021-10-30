@@ -8,6 +8,7 @@ defaults:
   - model: mobilenetv3_small
   - scheduler: multistep
   - loss: nll_loss
+  - transforms: transform
   - _self_
 
 exp_dir: ./exp/pneumonia_cls
