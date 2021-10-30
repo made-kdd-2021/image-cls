@@ -5,12 +5,12 @@ hydra:
 
 exp_dir: ./exp/pneumonia_cls
 checkpoint_path: ${exp_dir}/checkpoints/last.ckpt
-batch_size: 32
+batch_size: 64
 num_workers: 2
 
 dataset:
   _target_: dataloader.chest_xray.ChestXrayDataset
   data_dir: ./data/raw/small-subset-chest_xray
   transform: null
-  data_type: val
+  data_type: test
   class_mapping: null

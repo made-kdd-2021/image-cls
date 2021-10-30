@@ -41,8 +41,8 @@ def main(config):
     exp_dir = pathlib.Path(config.exp_dir)
     exp_dir.mkdir(exist_ok=True, parents=True)
 
-    # checkpoint_dir = exp_dir / "checkpoints"
-    # checkpoint_dir.mkdir(exist_ok=True, parents=True)
+    log_dir = pathlib.Path(config.trainer.logger.save_dir)
+    log_dir.mkdir(exist_ok=True, parents=True)
     metric_dir = exp_dir / "metrics"
     metric_dir.mkdir(exist_ok=True, parents=True)
     transform_dir = exp_dir / "transforms"

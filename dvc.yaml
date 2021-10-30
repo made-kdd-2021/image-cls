@@ -1,26 +1,83 @@
+vars:
+  - ./configs/training.yaml:exp_dir
+  - full_image_dir: ./data/images/chest_xray
+  - small_subset_dir: ./data/raw/small-subset-chest_xray
+  - exp_test_run: ./exp/pneumonia_cls_fast_run
+
 stages:
-  train:
-    cmd: python ./train.py -cd ./configs
-    params:
-      - ./configs/optimizer/adam.yaml:
-          - lr
-          - betas
-          - amsgrad
-          - weight_decay
-      - ./configs/scheduler/multistep.yaml:
-          - milestones
-          - gamma
-      - ./configs/training.yaml:
-          - model_trainer.unfreeze_after_epoch
-          - trainer.amp_backend
-          - trainer.benchmark
-          - trainer.deterministic
-          - trainer.precision
-          - trainer.max_epochs
-          - trainer.check_val_every_n_epoch
+  unpack:
+    cmd: python -m zipfile -e ./data/raw/chest_xray.zip ./data/images/
+    deps:
+      - ./data/raw/chest_xray.zip
+    outs:
+      - ${full_image_dir}:
+          cache: false
+          persist: true
+
+  fast-test-train:
+    cmd: python ./train.py trainer.fast_dev_run=2 trainer.gpus=null trainer.precision=32 datamodule.train_batch_size=4 datamodule.data_dir=${small_subset_dir} exp_dir=${exp_test_run}
     deps:
       - ./train.py
       - ./configs/training.yaml
-      - ./model/cls_model.py
-      - ./training/loss.py
-      - ./training/trainer.py
+      - ./configs/loss
+      - ./configs/model
+      - ./configs/optimizer
+      - ./configs/scheduler
+      - ./configs/transforms
+      - ./dataloader
+      - ./model
+      - ./transforms
+      - ${small_subset_dir}
+    outs:
+      - ${exp_test_run}/checkpoint:
+          cache: false
+      - ${exp_test_run}/logs:
+          cache: false
+      - ${exp_test_run}/transforms:
+          cache: false
+      - ${exp_test_run}/class_mapping.json:
+          cache: false
+      - ${exp_test_run}/train_config.yaml:
+          cache: false
+
+  fast-test:
+    cmd: python ./test.py dataset.data_type='val' exp_dir=${exp_test_run} dataset.data_dir=${small_subset_dir}
+    deps:
+      - ${exp_test_run}/checkpoint
+      - ${exp_test_run}/logs
+      - ${exp_test_run}/transforms
+      - ${exp_test_run}/class_mapping.json
+      - ${exp_test_run}/train_config.yaml
+    metrics:
+      - ${exp_test_run}/test_metrics/auc.json
+    plots:
+      - ${exp_test_run}/test_metrics/prediction.csv:
+          x: true_labels
+          y: predicted_labels
+          template: confusion
+
+  # train:
+  #   cmd: python ./train.py -cd ./configs
+  #   params:
+  #     - ./configs/optimizer/adam.yaml:
+  #         - lr
+  #         - betas
+  #         - amsgrad
+  #         - weight_decay
+  #     - ./configs/scheduler/multistep.yaml:
+  #         - milestones
+  #         - gamma
+  #     - ./configs/training.yaml:
+  #         - model_trainer.unfreeze_after_epoch
+  #         - trainer.amp_backend
+  #         - trainer.benchmark
+  #         - trainer.deterministic
+  #         - trainer.precision
+  #         - trainer.max_epochs
+  #         - trainer.check_val_every_n_epoch
+  #   deps:
+  #     - ./train.py
+  #     - ./configs/training.yaml
+  #     - ./model/cls_model.py
+  #     - ./training/loss.py
+  #     - ./training/trainer.py

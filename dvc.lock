@@ -39,3 +39,109 @@ stages:
         trainer.deterministic: false
         trainer.max_epochs: 100
         trainer.precision: 16
+  unpack:
+    cmd: python -m zipfile -e ./data/raw/chest_xray.zip ./data/images/
+    deps:
+    - path: ./data/raw/chest_xray.zip
+      md5: cf296809bf91fe1dc233eee9e1f038f6
+      size: 1237745664
+    outs:
+    - path: ./data/images
+      md5: cb9dbb23762690f2e8dfca22c604dfe4.dir
+      size: 1236482806
+      nfiles: 5856
+  fast-test-train:
+    cmd: python ./train.py trainer.fast_dev_run=2 trainer.gpus=null trainer.precision=32
+      datamodule.train_batch_size=4 datamodule.data_dir=./data/raw/small-subset-chest_xray
+      exp_dir=./exp/pneumonia_cls_fast_run
+    deps:
+    - path: ./configs/loss
+      md5: 616faeb21af49641f50d324e5b5b723f.dir
+      size: 44
+      nfiles: 1
+    - path: ./configs/model
+      md5: d167e77beacc8976f00ac8fa03a19776.dir
+      size: 62
+      nfiles: 1
+    - path: ./configs/optimizer
+      md5: d8e5f7e8f4a33067d2c35d04f36d5187.dir
+      size: 92
+      nfiles: 1
+    - path: ./configs/scheduler
+      md5: 0d7d72889ca181d849f8adf5c1ff03f7.dir
+      size: 82
+      nfiles: 1
+    - path: ./configs/training.yaml
+      md5: 211b1c9388660a0138495540ce903ba6
+      size: 1415
+    - path: ./configs/transforms
+      md5: 6170e3262f88a3663118424a749aad3e.dir
+      size: 1113
+      nfiles: 1
+    - path: ./data/raw/small-subset-chest_xray
+      md5: a35d3e292ef6d48b2bec699592bce4ee.dir
+      size: 5624468
+      nfiles: 24
+    - path: ./dataloader
+      md5: 43af919ab56fc4f00767993ee1d24263.dir
+      size: 1692
+      nfiles: 2
+    - path: ./model
+      md5: e2917b56f9f883f02acd2b627161d489.dir
+      size: 1606
+      nfiles: 2
+    - path: ./train.py
+      md5: 351492613d624dea3405e05a6518e54a
+      size: 3356
+    - path: ./transforms
+      md5: e91b3ba4104290386ad6ca9514adaa8f.dir
+      size: 1785
+      nfiles: 2
+    outs:
+    - path: ./exp/pneumonia_cls_fast_run/checkpoint
+      md5: 3e3d4d955fb61f211534654e934e4849.dir
+      size: 13336449
+      nfiles: 1
+    - path: ./exp/pneumonia_cls_fast_run/class_mapping.json
+      md5: ec20464c7c2e425b582d0dec7941fb59
+      size: 29
+    - path: ./exp/pneumonia_cls_fast_run/logs
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
+    - path: ./exp/pneumonia_cls_fast_run/train_config.yaml
+      md5: 8928958acb9c5e9216ccc4ef60d75597
+      size: 2737
+    - path: ./exp/pneumonia_cls_fast_run/transforms
+      md5: 88427514d4620a433e3614c394a6fcac.dir
+      size: 2341
+      nfiles: 2
+  fast-test:
+    cmd: python ./test.py dataset.data_type='val' exp_dir=./exp/pneumonia_cls_fast_run
+      dataset.data_dir=./data/raw/small-subset-chest_xray
+    deps:
+    - path: ./exp/pneumonia_cls_fast_run/checkpoint
+      md5: 3e3d4d955fb61f211534654e934e4849.dir
+      size: 13336449
+      nfiles: 1
+    - path: ./exp/pneumonia_cls_fast_run/class_mapping.json
+      md5: ec20464c7c2e425b582d0dec7941fb59
+      size: 29
+    - path: ./exp/pneumonia_cls_fast_run/logs
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
+    - path: ./exp/pneumonia_cls_fast_run/train_config.yaml
+      md5: 8928958acb9c5e9216ccc4ef60d75597
+      size: 2737
+    - path: ./exp/pneumonia_cls_fast_run/transforms
+      md5: 88427514d4620a433e3614c394a6fcac.dir
+      size: 2341
+      nfiles: 2
+    outs:
+    - path: ./exp/pneumonia_cls_fast_run/test_metrics/auc.json
+      md5: 94d5939bb1a5d09a3c13c7e2466c4804
+      size: 16
+    - path: ./exp/pneumonia_cls_fast_run/test_metrics/prediction.csv
+      md5: 280206f2a1d2ccfa0f72aac4dc9f1cb9
+      size: 391
