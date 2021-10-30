@@ -46,10 +46,10 @@ stages:
       md5: cf296809bf91fe1dc233eee9e1f038f6
       size: 1237745664
     outs:
-    - path: ./data/images
-      md5: cb9dbb23762690f2e8dfca22c604dfe4.dir
-      size: 1236482806
-      nfiles: 5856
+    - path: ./data/images/chest_xray
+      md5: 3d1154b773c5db7c92cd0d877fed93ef.dir
+      size: 1236891426
+      nfiles: 5857
   fast-test-train:
     cmd: python ./train.py trainer.fast_dev_run=2 trainer.gpus=null trainer.precision=32
       datamodule.train_batch_size=4 datamodule.data_dir=./data/raw/small-subset-chest_xray

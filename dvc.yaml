@@ -56,28 +56,42 @@ stages:
           y: predicted_labels
           template: confusion
 
-  # train:
-  #   cmd: python ./train.py -cd ./configs
-  #   params:
-  #     - ./configs/optimizer/adam.yaml:
-  #         - lr
-  #         - betas
-  #         - amsgrad
-  #         - weight_decay
-  #     - ./configs/scheduler/multistep.yaml:
-  #         - milestones
-  #         - gamma
-  #     - ./configs/training.yaml:
-  #         - model_trainer.unfreeze_after_epoch
-  #         - trainer.amp_backend
-  #         - trainer.benchmark
-  #         - trainer.deterministic
-  #         - trainer.precision
-  #         - trainer.max_epochs
-  #         - trainer.check_val_every_n_epoch
-  #   deps:
-  #     - ./train.py
-  #     - ./configs/training.yaml
-  #     - ./model/cls_model.py
-  #     - ./training/loss.py
-  #     - ./training/trainer.py
+  train:
+    cmd: python ./train.py
+    deps:
+      - ./train.py
+      - ./configs/training.yaml
+      - ./configs/loss
+      - ./configs/model
+      - ./configs/optimizer
+      - ./configs/scheduler
+      - ./configs/transforms
+      - ./dataloader
+      - ./model
+      - ./transforms
+      - ${full_image_dir}
+    params:
+      - ./configs/optimizer/adam.yaml:
+          - lr
+          - betas
+          - amsgrad
+          - weight_decay
+      - ./configs/scheduler/multistep.yaml:
+          - milestones
+          - gamma
+      - ./configs/training.yaml:
+          - model_trainer.unfreeze_after_epoch
+          - trainer.amp_backend
+          - trainer.benchmark
+          - trainer.deterministic
+          - trainer.precision
+          - trainer.max_epochs
+          - trainer.check_val_every_n_epoch
+          - datamodule.train_batch_size
+    outs:
+      - ${exp_dir}/checkpoint
+      - ${exp_dir}/logs
+      - ${exp_dir}/transforms
+      - ${exp_dir}/class_mapping.json
+      - ${exp_dir}/train_config.yaml
+
