@@ -12,8 +12,10 @@ train_transform:
       dtype:
         _target_: transforms.transforms.get_dtype
     - _target_: torchvision.transforms.Normalize
-      mean: [0.485, 0.456, 0.406]
-      std: [0.229, 0.224, 0.225]
+      _convert_: partial
+      _args_:
+        - [0.485, 0.456, 0.406]
+        - [0.229, 0.224, 0.225]
 
 # in test we skip RandomHorizontalFlip
 test_transform:
@@ -23,5 +25,7 @@ test_transform:
       dtype:
         _target_: transforms.transforms.get_dtype
     - _target_: torchvision.transforms.Normalize
-      mean: [0.485, 0.456, 0.406]
-      std: [0.229, 0.224, 0.225]
+      _convert_: partial
+      _args_: 
+        - [0.485, 0.456, 0.406]
+        - [0.229, 0.224, 0.225]

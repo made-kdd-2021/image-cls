@@ -19,8 +19,8 @@ def test_transform(max_size, aspect_ratio, image_batch):
 def test_config_transform(transform_type, image_batch):
     with initialize(config_path=CONFIG_PATH):
         cfg = compose(config_name="training")
-        train_transform = utils.instantiate(getattr(cfg.transforms, transform_type))
-        transformed = train_transform(image_batch)
+        transform = torch.jit.script(utils.instantiate(getattr(cfg.transforms, transform_type)))
+        transformed = transform(image_batch)
         assert transformed.shape[-1] == transformed.shape[-2]
         assert transformed.shape[-3] == 3
         assert transformed.dtype == torch.float

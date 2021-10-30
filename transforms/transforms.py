@@ -13,6 +13,7 @@ class ResizeWithPadding(torch.nn.Module):
         """aspect_ratio is width / height
         """
         assert padding_mode in ("constant", "edge", "reflect", "symmetric")
+        super().__init__()
         self.max_size = max_size
         self.aspect_ratio = aspect_ratio
         self.fill_value = fill_value
@@ -22,10 +23,10 @@ class ResizeWithPadding(torch.nn.Module):
         height, width = image.shape[-2:]
         if height > width:
             new_height = self.max_size
-            new_width = round(self.aspect_ratio * height)
+            new_width = int(round(self.aspect_ratio * height))
         else:
             new_width = self.max_size
-            new_height = round(new_width / self.aspect_ratio)
+            new_height = int(round(new_width / self.aspect_ratio))
 
         resized = F.resize(image, size=[new_height, new_width],
                            interpolation=InterpolationMode.BILINEAR)
@@ -38,3 +39,6 @@ class ResizeWithPadding(torch.nn.Module):
                      padding=[left_right_half_pad, top_half_pad, left_right_half_pad +
                               right_reminder, top_half_pad + bottom_reminder],
                      padding_mode=self.padding_mode, fill=self.fill_value)
+
+    def forward(self, image: torch.Tensor):
+        return self.__call__(image)
