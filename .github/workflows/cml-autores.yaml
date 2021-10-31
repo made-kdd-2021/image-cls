@@ -1,0 +1,42 @@
+name: CML autoreport
+
+on:
+  pull_request:
+    branches: [master, develop]
+    paths:
+      - dvc.yaml
+      - dvc.lock
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - uses: iterative/setup-cml@v1
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.dev.txt
+
+      - name: Prepare DVC cache
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.DVC_DATA_SECRET }}
+        run: |
+          dvc pull train
+
+      - name: Send CML report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dvc metrics show --md >> report.md
+          dvc plots -t confusion -y true_labels -x predicted_labels --show-vega ./exp/pneumonia_cls/test_metrics/prediction.csv > vega.json
+          vl2png vega.json -s 1.5 | cml-publish --md >> report.md
+          cml-send-comment report.md

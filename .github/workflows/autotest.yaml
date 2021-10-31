@@ -28,10 +28,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
+      - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Cache pip dependecies
         uses: actions/cache@v2
@@ -52,12 +52,11 @@ jobs:
 
       - name: Prepare DVC cache
         env:
-          DVC_SECRET: ${{ secrets.DVC_DATA_SECRET }}
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.DVC_DATA_SECRET }}
         run: |
-          echo ${DVC_SECRET} > ${{ github.workspace }}/.dvc/secret.json
           cat << EOF > ./.dvc/config.local
           ['remote "storage"']
-            gdrive_service_account_json_file_path = ${{ github.workspace }}/.dvc/secret.json
+            gdrive_service_account_json_file_path = ${{ github.workspace }}/.dvc/tmp/gdrive-user-credentials.json
           EOF
 
           dvc pull ./data/raw/small-subset-chest_xray.dvc
