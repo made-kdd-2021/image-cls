@@ -30,6 +30,11 @@ jobs:
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.DVC_DATA_SECRET }}
         run: |
+          cat << EOF > ./.dvc/config.local
+          ['remote "storage"']
+            gdrive_service_account_json_file_path = ${{ github.workspace }}/.dvc/tmp/gdrive-user-credentials.json
+          EOF
+
           dvc pull train
 
       - name: Send CML report

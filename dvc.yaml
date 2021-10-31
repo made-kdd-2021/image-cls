@@ -41,7 +41,7 @@ stages:
           cache: false
 
   fast-test:
-    cmd: python ./test.py dataset.data_type='val' exp_dir=${exp_test_run} dataset.data_dir=${small_subset_dir}
+    cmd: python ./test.py dataset.data_type='val' device='cpu' exp_dir=${exp_test_run} dataset.data_dir=${small_subset_dir}
     deps:
       - ${exp_test_run}/checkpoint
       - ${exp_test_run}/logs
