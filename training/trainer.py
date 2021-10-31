@@ -6,13 +6,12 @@ from hydra.utils import instantiate
 from torch import nn
 from torch import Tensor
 import torch
-from torch.nn import functional as F
 from sklearn import metrics
 import numpy as np
 
 from model import PneumoniaMobileNetV3
 
-from .utils import plot_confusion_matrix, plot_roc
+from utils import plot_confusion_matrix, plot_roc
 
 InputType = Dict[str, Tensor]
 

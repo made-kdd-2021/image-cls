@@ -2,14 +2,14 @@ name: CML autoreport
 
 on:
   pull_request:
-    branches: [master, develop, feature/training]
+    branches: [master, develop, feature/training ]
     paths:
       - dvc.yaml
       - dvc.lock
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  send-report:
     runs-on: ubuntu-20.04
 
     steps:
@@ -20,6 +20,17 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Cache pip dependecies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/pip
+            ${{ github.workspace }}/.dvc/cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+
       - uses: iterative/setup-cml@v1
 
       - name: Install dependencies
@@ -29,19 +40,20 @@ jobs:
       - name: Prepare DVC cache
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.DVC_DATA_SECRET }}
+          DVC_SECRET_FILE: ${{ secrets.DVC_SECRET_FILE }}
         run: |
           cat << EOF > ./.dvc/config.local
           ['remote "storage"']
-            gdrive_service_account_json_file_path = ${{ github.workspace }}/.dvc/tmp/gdrive-user-credentials.json
+            gdrive_service_account_json_file_path = ${{ github.workspace }}/${DVC_SECRET_FILE}
           EOF
 
-          dvc pull save-conf-matrix test train
+          dvc pull -d save-conf-matrix test
 
       - name: Send CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dvc metrics show ./exp/pneumonia_cls/test_metrics/auc.json >> report.md
+          dvc metrics show  --md ./exp/pneumonia_cls/test_metrics/auc.json >> report.md
           dvc repro -s save-conf-matrix
           cml-publish ./matrix.jpg --md --title 'Confusion matrix' >> report.md
           cml-send-comment report.md

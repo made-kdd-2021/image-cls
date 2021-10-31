@@ -4,7 +4,7 @@ import hydra
 import pandas as pd
 from omegaconf import OmegaConf
 
-from training.utils import plot_confusion_matrix
+from utils import plot_confusion_matrix
 from utils import load_json
 from sklearn import metrics
 
