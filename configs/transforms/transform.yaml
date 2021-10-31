@@ -2,7 +2,7 @@ train_transform:
   _target_: torch.nn.Sequential
   _args_:
     - _target_: transforms.transforms.ResizeWithPadding
-      max_size: 200
+      max_size: 600
       aspect_ratio: 1.6
       fill_value: 0
       padding_mode: "constant"
@@ -11,11 +11,6 @@ train_transform:
     - _target_: torchvision.transforms.ConvertImageDtype
       dtype:
         _target_: transforms.transforms.get_dtype
-    - _target_: torchvision.transforms.Normalize
-      _convert_: partial
-      _args_:
-        - [0.485, 0.456, 0.406]
-        - [0.229, 0.224, 0.225]
 
 # in test we skip RandomHorizontalFlip
 test_transform:
@@ -29,8 +24,3 @@ test_transform:
     - _target_: torchvision.transforms.ConvertImageDtype
       dtype:
         _target_: transforms.transforms.get_dtype
-    - _target_: torchvision.transforms.Normalize
-      _convert_: partial
-      _args_: 
-        - [0.485, 0.456, 0.406]
-        - [0.229, 0.224, 0.225]

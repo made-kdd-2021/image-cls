@@ -34,9 +34,10 @@ class ChestXrayDataModule(LightningDataModule):
         self.train_dataset = ChestXrayDataset(data_dir=self._data_dir,
                                               transform=self.train_transforms, data_type="train", class_mapping=self._class_mapping)
         self.test_dataset = ChestXrayDataset(data_dir=self._data_dir,
-                                             transform=self._test_transforms, data_type="test", class_mapping=self._class_mapping)
+                                             transform=self._test_transforms, data_type="val", class_mapping=self._class_mapping)
+        # In the datset test is validation in the PyTorch Lighting
         self.val_dataset = ChestXrayDataset(data_dir=self._data_dir,
-                                            transform=self._val_transforms, data_type="val", class_mapping=self._class_mapping)
+                                            transform=self._val_transforms, data_type="test", class_mapping=self._class_mapping)
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self._train_batch_size,

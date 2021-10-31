@@ -4,13 +4,14 @@ hydra:
   output_subdir: null
 
 exp_dir: ./exp/pneumonia_cls
-checkpoint_path: ${exp_dir}/checkpoints/last.ckpt
+checkpoint_path: ${exp_dir}/checkpoint/last.ckpt
 batch_size: 64
 num_workers: 2
+device: cuda
 
 dataset:
   _target_: dataloader.chest_xray.ChestXrayDataset
-  data_dir: ./data/raw/small-subset-chest_xray
-  transform: null
+  data_dir: ./data/images/chest_xray
   data_type: test
+  transform: null
   class_mapping: null

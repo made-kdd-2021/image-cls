@@ -58,10 +58,12 @@ def plot_confusion_matrix(cm,
 
     for i in range(len(cm)):
         for j in range(len(cm[0])):
-            text = ax.text(j, i,  str(cm[i, j]), ha="center", va="center", color="black")
+            text = ax.text(j, i,  f"{cm[i, j]:.4f}", ha="center", va="center", color="black")
 
     ax.set_ylabel("True label")
     ax.set_xlabel("Predicted label")
+
+    plt.tight_layout()
 
     return figure
 

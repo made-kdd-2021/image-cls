@@ -29,4 +29,4 @@ def image_batch_info():
 
 @ pytest.fixture(scope="session")
 def model():
-    return PneumoniaMobileNetV3(num_classes=2)
+    return PneumoniaMobileNetV3()
