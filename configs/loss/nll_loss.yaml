@@ -3,4 +3,4 @@ reduction: 'mean'
 pos_weight:
   _target_: torch.tensor
   _args_:
-    - 0.5
+    - 0.4

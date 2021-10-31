@@ -76,7 +76,11 @@ class PneumoniaClsTrainer(LightningModule):
         return conf_matrix, auc_roc, (fpr, tpr, threholds)
 
     def _log_metrics(self, prefix_stage: str, prediction_res: dict):
-        conf_matrix, auc_roc, (fpr, tpr, _) = self._compute_metrics(prediction_res)
+        try:
+            conf_matrix, auc_roc, (fpr, tpr, _) = self._compute_metrics(prediction_res)
+        except ValueError:
+            self._logger.exception("Cannot write metrics")
+            return
 
         if self.logger is not None:
             fig = plot_confusion_matrix(conf_matrix, self._class_labels,
