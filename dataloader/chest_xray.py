@@ -36,6 +36,6 @@ class ChestXrayDataset(data.Dataset):
         return len(self._images_path)
 
     def __getitem__(self, index) -> dict:
-        image = io.read_image(str(self._images_path[index]), mode=ImageReadMode.RGB)
+        image = io.read_image(str(self._images_path[index]), mode=ImageReadMode.GRAY)
         image_path = self._images_path[index].relative_to(self.data_dir).as_posix()
         return {"image": self.transform(image), "label": self._class_labels[index], "image_path": image_path}

@@ -2,7 +2,6 @@ tzlocal
 pyyaml
 pytorch-lightning~=1.4.9
 hydra-core~=1.1.1
-torchmetrics~=0.5.1
 matplotlib~=3.4
 scikit-learn~=1.0.1
 pandas~=1.3

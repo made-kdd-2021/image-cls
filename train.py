@@ -52,6 +52,8 @@ def main(config):
     model_trainer: PneumoniaClsTrainer = utils.instantiate(config.model_trainer,
                                                            loss_module=utils.instantiate(
                                                                config.loss),
+                                                           scheduler_config=config.model_trainer.get(
+                                                               "scheduler_config", None),
                                                            model=model,
                                                            _recursive_=False)
 

@@ -41,7 +41,7 @@ stages:
           cache: false
 
   fast-test:
-    cmd: python ./test.py dataset.data_type='val' exp_dir=${exp_test_run} dataset.data_dir=${small_subset_dir}
+    cmd: python ./test.py dataset.data_type='val' device='cpu' exp_dir=${exp_test_run} dataset.data_dir=${small_subset_dir}
     deps:
       - ${exp_test_run}/checkpoint
       - ${exp_test_run}/logs
@@ -79,8 +79,9 @@ stages:
       - ./configs/scheduler/multistep.yaml:
           - milestones
           - gamma
+      - ./configs/loss/nll_loss.yaml:
+          - pos_weight._args_
       - ./configs/training.yaml:
-          - model_trainer.unfreeze_after_epoch
           - trainer.amp_backend
           - trainer.benchmark
           - trainer.deterministic
@@ -88,10 +89,42 @@ stages:
           - trainer.max_epochs
           - trainer.check_val_every_n_epoch
           - datamodule.train_batch_size
+          - model_trainer.proba_threshold
+      - ./configs/transforms/transform.yaml:
+          - train_transform._args_
+          - test_transform._args_
     outs:
       - ${exp_dir}/checkpoint
       - ${exp_dir}/logs
       - ${exp_dir}/transforms
       - ${exp_dir}/class_mapping.json
       - ${exp_dir}/train_config.yaml
+
+  test:
+    cmd: python ./test.py dataset.data_type='test' exp_dir=${exp_dir}
+    deps:
+      - ${exp_dir}/checkpoint
+      - ${exp_dir}/logs
+      - ${exp_dir}/transforms
+      - ${exp_dir}/class_mapping.json
+      - ${exp_dir}/train_config.yaml
+    metrics:
+      - ${exp_dir}/test_metrics/auc.json
+    plots:
+      - ${exp_dir}/test_metrics/prediction.csv:
+          x: true_labels
+          y: predicted_labels
+          template: confusion
+
+  save-conf-matrix:
+    cmd: python ./plot_conf_matrix.py exp_dir=${exp_dir} image_path=./matrix.jpg
+    deps: 
+      - ./plot_conf_matrix.py
+      - ${exp_dir}/class_mapping.json
+      - ${exp_dir}/test_metrics/auc.json
+      - ${exp_dir}/test_metrics/prediction.csv
+      - ${exp_dir}/train_config.yaml
+    outs:
+      - ./matrix.jpg:
+         cache: false
 

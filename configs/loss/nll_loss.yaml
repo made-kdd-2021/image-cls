@@ -1,2 +1,6 @@
-_target_: torch.nn.CrossEntropyLoss
-reduction: 'sum'
+_target_: torch.nn.BCEWithLogitsLoss
+reduction: 'mean'
+pos_weight:
+  _target_: torch.tensor
+  _args_:
+    - 0.5
