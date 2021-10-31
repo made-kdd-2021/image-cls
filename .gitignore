@@ -133,3 +133,5 @@ exp/
 
 data/images/
 dvc_plots/
+*.jpg
+*.png

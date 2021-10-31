@@ -243,3 +243,25 @@ stages:
     - path: ./exp/pneumonia_cls/test_metrics/prediction.csv
       md5: fa5c3f725af56b266f2a33896b3855b4
       size: 34322
+  save-conf-matrix:
+    cmd: python ./plot_conf_matrix.py exp_dir=./exp/pneumonia_cls image_path=./matrix.jpg
+    deps:
+    - path: ./exp/pneumonia_cls/class_mapping.json
+      md5: ec20464c7c2e425b582d0dec7941fb59
+      size: 29
+    - path: ./exp/pneumonia_cls/test_metrics/auc.json
+      md5: 4f4691ac0e54c84d7b493229b736af52
+      size: 31
+    - path: ./exp/pneumonia_cls/test_metrics/prediction.csv
+      md5: fa5c3f725af56b266f2a33896b3855b4
+      size: 34322
+    - path: ./exp/pneumonia_cls/train_config.yaml
+      md5: 16ca526123a515cdf7249e5039c2279f
+      size: 2516
+    - path: ./plot_conf_matrix.py
+      md5: a6a2b22be40d8fbc19026669f8b32049
+      size: 1581
+    outs:
+    - path: ./matrix.jpg
+      md5: 471241839cef04fb0df76eebc537019b
+      size: 66799

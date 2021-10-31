@@ -116,3 +116,15 @@ stages:
           y: predicted_labels
           template: confusion
 
+  save-conf-matrix:
+    cmd: python ./plot_conf_matrix.py exp_dir=${exp_dir} image_path=./matrix.jpg
+    deps: 
+      - ./plot_conf_matrix.py
+      - ${exp_dir}/class_mapping.json
+      - ${exp_dir}/test_metrics/auc.json
+      - ${exp_dir}/test_metrics/prediction.csv
+      - ${exp_dir}/train_config.yaml
+    outs:
+      - ./matrix.jpg:
+         cache: false
+

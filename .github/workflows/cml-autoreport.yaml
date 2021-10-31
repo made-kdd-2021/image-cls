@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.dev.txt
+          pip install -r ./requirements.dev.txt -r ./requirements.txt
 
       - name: Prepare DVC cache
         env:
@@ -35,13 +35,13 @@ jobs:
             gdrive_service_account_json_file_path = ${{ github.workspace }}/.dvc/tmp/gdrive-user-credentials.json
           EOF
 
-          dvc pull test
+          dvc pull save-conf-matrix test train
 
       - name: Send CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           dvc metrics show ./exp/pneumonia_cls/test_metrics/auc.json >> report.md
-          dvc plots show -t confusion -y true_labels -x predicted_labels --show-vega ./exp/pneumonia_cls/test_metrics/prediction.csv > vega.json
-          vl2png vega.json -s 1.5 | cml-publish --md >> report.md
+          dvc repro -s save-conf-matrix
+          cml-publish ./matrix.jpg --md --title 'Confusion matrix' >> report.md
           cml-send-comment report.md

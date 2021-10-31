@@ -1,5 +1,4 @@
 from typing import Sequence
-import matplotlib
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,6 +7,7 @@ import numpy as np
 def plot_confusion_matrix(cm,
                           target_names: Sequence[str],
                           title='Confusion matrix',
+                          figsize=None,
                           cmap=None):
     """
     given a confusion matrix (cm), make a nice plot
@@ -42,7 +42,7 @@ def plot_confusion_matrix(cm,
     if cmap is None:
         cmap = plt.get_cmap('Blues')
 
-    figure = plt.figure()
+    figure = plt.figure(figsize=figsize)
     ax = figure.add_subplot(111)
     im = ax.imshow(cm, interpolation="nearest", cmap=cmap)
     ax.set_title(title)
