@@ -2,7 +2,7 @@ name: CML autoreport
 
 on:
   pull_request:
-    branches: [master, develop, feature/training ]
+    branches: [master, develop ]
     paths:
       - dvc.yaml
       - dvc.lock
