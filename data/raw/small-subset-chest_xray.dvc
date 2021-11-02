@@ -1,0 +1,5 @@
+outs:
+- md5: a35d3e292ef6d48b2bec699592bce4ee.dir
+  size: 5624468
+  nfiles: 24
+  path: small-subset-chest_xray
