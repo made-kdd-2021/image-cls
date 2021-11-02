@@ -1,13 +1,36 @@
+import json
+import pickle
+
 from typing import Sequence
-import matplotlib
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 
+def dump_object(path_to_file, object, by_ref: bool = False):
+    with open(path_to_file, "wb") as file_object:
+        pickle.dump(object, file_object, protocol=3)
+
+
+def dump_json(path_to_file, json_dict: dict):
+    with open(path_to_file, "w", encoding="utf-8") as file_object:
+        json.dump(json_dict, file_object)
+
+
+def load_dump(path_to_file):
+    with open(path_to_file, "rb") as file_object:
+        return pickle.load(file_object)
+
+
+def load_json(path_to_file):
+    with open(path_to_file, "r", encoding="utf-8") as file_object:
+        return json.load(file_object)
+
+
 def plot_confusion_matrix(cm,
                           target_names: Sequence[str],
                           title='Confusion matrix',
+                          figsize=None,
                           cmap=None):
     """
     given a confusion matrix (cm), make a nice plot
@@ -42,7 +65,7 @@ def plot_confusion_matrix(cm,
     if cmap is None:
         cmap = plt.get_cmap('Blues')
 
-    figure = plt.figure()
+    figure = plt.figure(figsize=figsize)
     ax = figure.add_subplot(111)
     im = ax.imshow(cm, interpolation="nearest", cmap=cmap)
     ax.set_title(title)
@@ -58,10 +81,12 @@ def plot_confusion_matrix(cm,
 
     for i in range(len(cm)):
         for j in range(len(cm[0])):
-            text = ax.text(j, i,  str(cm[i, j]), ha="center", va="center", color="black")
+            text = ax.text(j, i,  f"{cm[i, j]:.4f}", ha="center", va="center", color="black")
 
     ax.set_ylabel("True label")
     ax.set_xlabel("Predicted label")
+
+    plt.tight_layout()
 
     return figure
 

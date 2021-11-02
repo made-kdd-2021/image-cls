@@ -1,28 +1,15 @@
-name: Test main code
+name: CML autoreport
 
 on:
-  push:
-    branches: [master, develop]
-    paths:
-      - '**.py'
-      - 'configs/**'
-      - log_settings.yaml
-      - requirements*.txt
-      - dvc.yaml
-      - dvc.lock
   pull_request:
-    branches: [master, develop]
+    branches: [master, develop ]
     paths:
-      - '**.py'
-      - 'configs/**'
-      - log_settings.yaml
-      - requirements*.txt
       - dvc.yaml
       - dvc.lock
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  send-report:
     runs-on: ubuntu-20.04
 
     steps:
@@ -44,11 +31,11 @@ jobs:
             ${{ runner.os }}-pip-
             ${{ runner.os }}-
 
+      - uses: iterative/setup-cml@v1
+
       - name: Install dependencies
         run: |
-          pip install wheel
-          pip install -r requirements.txt -r requirements.dev.txt -r requirements.cpu.txt
-
+          pip install -r ./requirements.dev.txt -r ./requirements.txt
 
       - name: Prepare DVC cache
         env:
@@ -60,13 +47,13 @@ jobs:
             gdrive_service_account_json_file_path = ${{ github.workspace }}/${DVC_SECRET_FILE}
           EOF
 
-          dvc pull ./data/raw/small-subset-chest_xray.dvc
+          dvc pull -d save-conf-matrix test
 
-      - name: Test with pytest
-        run: pytest --cov=model --cov=training ./tests
-
-      - name: Run test train
-        run: dvc repro fast-test
-
-      
-
+      - name: Send CML report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dvc metrics show  --md ./exp/pneumonia_cls/test_metrics/auc.json >> report.md
+          dvc repro -s save-conf-matrix
+          cml-publish ./matrix.jpg --md --title 'Confusion matrix' >> report.md
+          cml-send-comment report.md

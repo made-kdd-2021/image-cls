@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from matplotlib import pyplot as plt
-from training.utils import plot_confusion_matrix, plot_roc
+from utils import plot_confusion_matrix, plot_roc
 
 
 @pytest.mark.parametrize("labels", [None, ["1", "2"]])

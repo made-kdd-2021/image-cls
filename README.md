@@ -10,16 +10,6 @@
 
 ### Зависимости
 
-Установить зависимости:
-```
-pip install -r. /requirements.txt -r ./requirements.dev.txt
-```
-
-Скачать данные из DVC:
-```
-dvc pull
-```
-
 Установка PyTorch с GPU:
 ```
 pip install -r ./requirements.gpu.txt
@@ -28,6 +18,16 @@ pip install -r ./requirements.gpu.txt
 PyTorch с CPU только:
 ```
 pip install -r ./requirements.cpu.txt
+```
+
+Установить зависимости только после установки PyTorch:
+```
+pip install -r. /requirements.txt -r ./requirements.dev.txt
+```
+
+Скачать данные из DVC:
+```
+dvc pull
 ```
 
 ### Запуск обучения
