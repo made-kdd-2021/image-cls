@@ -5,7 +5,7 @@ stages:
     deps:
     - path: ./configs/loss
       md5: e30df019bb2ac190029e63e7f6abebcf.dir
-      size: 116
+      size: 111
       nfiles: 1
     - path: ./configs/model
       md5: fb32db7d94b2302bed0b2df07a784fd8.dir
@@ -13,37 +13,37 @@ stages:
       nfiles: 1
     - path: ./configs/optimizer
       md5: 0a000cfc02256a4c7805a39572869c04.dir
-      size: 92
+      size: 88
       nfiles: 1
     - path: ./configs/scheduler
-      md5: 2e044b785f128330fa5368e7e6fb2ac6.dir
-      size: 76
+      md5: 4fcc8c633c0d80e319e19ac4d34f1f07.dir
+      size: 74
       nfiles: 1
     - path: ./configs/training.yaml
-      md5: f326112979b117bcaf2728521c87e7a1
-      size: 1556
+      md5: 5d82859feb9a85f13562ee919eff2faa
+      size: 1493
     - path: ./configs/transforms
-      md5: 1fc23b03e3f9d2f538f51f47f7bbcad3.dir
-      size: 2033
-      nfiles: 2
+      md5: 19aab838f719461adac57c45f424523e.dir
+      size: 772
+      nfiles: 1
     - path: ./data/images/chest_xray
-      md5: 3d1154b773c5db7c92cd0d877fed93ef.dir
-      size: 1236891426
-      nfiles: 5857
+      md5: 5e95cbf05923c6f7a093e84fbdba9463.dir
+      size: 1236482806
+      nfiles: 5856
     - path: ./dataloader
       md5: 51f5396f77c6e8a98049d59f0dc2f849.dir
-      size: 1693
+      size: 1651
       nfiles: 2
     - path: ./model
       md5: fc4087cd34e1c0bb48be93289489e55e.dir
-      size: 2888
+      size: 2803
       nfiles: 2
     - path: ./train.py
       md5: e5eb00d852f3e969c686fc88752ff988
-      size: 3550
+      size: 3466
     - path: ./transforms
       md5: e91b3ba4104290386ad6ca9514adaa8f.dir
-      size: 1785
+      size: 1740
       nfiles: 2
     params:
       configs/loss/nll_loss.yaml:
@@ -57,11 +57,11 @@ stages:
         lr: 0.001
         weight_decay: 1e-05
       configs/scheduler/multistep.yaml:
-        gamma: 0.1
+        gamma: 0.5
         milestones:
         - 10
       configs/training.yaml:
-        datamodule.train_batch_size: 64
+        datamodule.train_batch_size: 32
         model_trainer.proba_threshold: 0.5
         trainer.amp_backend: native
         trainer.benchmark: true
@@ -92,19 +92,19 @@ stages:
             _target_: transforms.transforms.get_dtype
     outs:
     - path: ./exp/pneumonia_cls/checkpoint
-      md5: 44f84bcea065ee332b5a6fb576fa39df.dir
-      size: 13030778
+      md5: add794fe8b79906be5e4bedc0910be56.dir
+      size: 13030650
       nfiles: 3
     - path: ./exp/pneumonia_cls/class_mapping.json
       md5: ec20464c7c2e425b582d0dec7941fb59
       size: 29
     - path: ./exp/pneumonia_cls/logs
-      md5: 692bacd66a9bbf9dcaf42d5c1c57783c.dir
-      size: 479172
+      md5: f694d93ec218b077853a39ff8751669c.dir
+      size: 263662
       nfiles: 2
     - path: ./exp/pneumonia_cls/train_config.yaml
-      md5: f33cec813d9d97b7d1572f2b5d6d9d05
-      size: 2516
+      md5: 3624b864531af8c5cb91a14f583c5401
+      size: 2421
     - path: ./exp/pneumonia_cls/transforms
       md5: 224f50e19195b1cef7b247094fd357ec.dir
       size: 1846
@@ -117,9 +117,9 @@ stages:
       size: 1237745664
     outs:
     - path: ./data/images/chest_xray
-      md5: 3d1154b773c5db7c92cd0d877fed93ef.dir
-      size: 1236891426
-      nfiles: 5857
+      md5: 5e95cbf05923c6f7a093e84fbdba9463.dir
+      size: 1236482806
+      nfiles: 5856
   fast-test-train:
     cmd: python ./train.py trainer.fast_dev_run=2 trainer.gpus=null trainer.precision=32
       datamodule.train_batch_size=4 datamodule.data_dir=./data/raw/small-subset-chest_xray
