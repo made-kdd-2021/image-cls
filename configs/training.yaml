@@ -16,7 +16,7 @@ exp_dir: ./exp/pneumonia_cls
 datamodule:
   _target_: training.dataloader.ChestXrayDataModule
   data_dir: ./data/images/chest_xray
-  train_batch_size: 128
+  train_batch_size: 32
   test_batch_size: 128
   val_batch_size: 128
   train_load_workers: 2
