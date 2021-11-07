@@ -1,0 +1,13 @@
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+image_path: null
+exp_dir: null 
+true_col: 'true_labels'
+pred_col: 'predicted_labels'
+normalize: 'all'
+dpi: 150
+figsize: [6, 6]
+title: 'Confusion matrix on test'
