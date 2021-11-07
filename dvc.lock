@@ -92,18 +92,18 @@ stages:
             _target_: transforms.transforms.get_dtype
     outs:
     - path: ./exp/pneumonia_cls/checkpoint
-      md5: add794fe8b79906be5e4bedc0910be56.dir
+      md5: 64733b0eab95a61646452ed249543c0f.dir
       size: 13030650
       nfiles: 3
     - path: ./exp/pneumonia_cls/class_mapping.json
       md5: ec20464c7c2e425b582d0dec7941fb59
       size: 29
     - path: ./exp/pneumonia_cls/logs
-      md5: f694d93ec218b077853a39ff8751669c.dir
-      size: 263662
+      md5: b2403f2ed4ef611f693be72f0ef86df8.dir
+      size: 437186
       nfiles: 2
     - path: ./exp/pneumonia_cls/train_config.yaml
-      md5: 3624b864531af8c5cb91a14f583c5401
+      md5: 25c957b3a2e5911fc6d2d3e27a921201
       size: 2421
     - path: ./exp/pneumonia_cls/transforms
       md5: 224f50e19195b1cef7b247094fd357ec.dir
