@@ -12,7 +12,7 @@ stages:
       size: 46
       nfiles: 1
     - path: ./configs/optimizer
-      md5: 0a000cfc02256a4c7805a39572869c04.dir
+      md5: 952b1c5c41c409c2902c96575eb51ca6.dir
       size: 88
       nfiles: 1
     - path: ./configs/scheduler
@@ -54,7 +54,7 @@ stages:
         betas:
         - 0.9
         - 0.999
-        lr: 0.001
+        lr: 0.0001
         weight_decay: 1e-05
       configs/scheduler/multistep.yaml:
         gamma: 0.06
@@ -92,19 +92,19 @@ stages:
             _target_: transforms.transforms.get_dtype
     outs:
     - path: ./exp/pneumonia_cls/checkpoint
-      md5: 7a5c756a54a7797e5e5f5bce8dbef5f0.dir
+      md5: d755d53b1a498e23d87e267ad9122289.dir
       size: 13030650
       nfiles: 3
     - path: ./exp/pneumonia_cls/class_mapping.json
       md5: ec20464c7c2e425b582d0dec7941fb59
       size: 29
     - path: ./exp/pneumonia_cls/logs
-      md5: a1d0f79217bc950ebd827f5c66df951c.dir
-      size: 485259
+      md5: 5d5a64002711f625f427ae06ae1f7b38.dir
+      size: 475129
       nfiles: 2
     - path: ./exp/pneumonia_cls/train_config.yaml
-      md5: 265adbc175a15fe7f35f7c46edb1585a
-      size: 2422
+      md5: d1be48fbed2b552f35fa59a11ec54dee
+      size: 2423
     - path: ./exp/pneumonia_cls/transforms
       md5: 224f50e19195b1cef7b247094fd357ec.dir
       size: 1846
@@ -219,30 +219,30 @@ stages:
     cmd: python ./test.py dataset.data_type='test' exp_dir=./exp/pneumonia_cls
     deps:
     - path: ./exp/pneumonia_cls/checkpoint
-      md5: 7a5c756a54a7797e5e5f5bce8dbef5f0.dir
+      md5: d755d53b1a498e23d87e267ad9122289.dir
       size: 13030650
       nfiles: 3
     - path: ./exp/pneumonia_cls/class_mapping.json
       md5: ec20464c7c2e425b582d0dec7941fb59
       size: 29
     - path: ./exp/pneumonia_cls/logs
-      md5: a1d0f79217bc950ebd827f5c66df951c.dir
-      size: 485259
+      md5: 5d5a64002711f625f427ae06ae1f7b38.dir
+      size: 475129
       nfiles: 2
     - path: ./exp/pneumonia_cls/train_config.yaml
-      md5: 265adbc175a15fe7f35f7c46edb1585a
-      size: 2422
+      md5: d1be48fbed2b552f35fa59a11ec54dee
+      size: 2423
     - path: ./exp/pneumonia_cls/transforms
       md5: 224f50e19195b1cef7b247094fd357ec.dir
       size: 1846
       nfiles: 2
     outs:
     - path: ./exp/pneumonia_cls/test_metrics/auc.json
-      md5: 7a29d24901d30706ba6e9c70fcbfd66b
-      size: 30
+      md5: 31095f420f02ddc02997441a1164eb4a
+      size: 31
     - path: ./exp/pneumonia_cls/test_metrics/prediction.csv
-      md5: b0aeb37e508d6365bf5de85d38292526
-      size: 33718
+      md5: 819bab738e4f6c01a2e03d81cc52ba87
+      size: 33835
   save-conf-matrix:
     cmd: python ./plot_conf_matrix.py exp_dir=./exp/pneumonia_cls image_path=./matrix.jpg
     deps:
