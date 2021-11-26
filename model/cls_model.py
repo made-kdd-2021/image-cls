@@ -87,3 +87,8 @@ class PneumoniaMobileNetV3(nn.Module):
 
     def num_classes(self) -> int:
         return self._num_classes
+
+    def predict_zero_class_proba(image):
+        predicted_proba = model.predict_proba(model(image))
+        predicted_zero = 1 - predicted_proba
+        return torch.cat((predicted_zero, predicted_proba), dim=1)
