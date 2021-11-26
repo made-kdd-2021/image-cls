@@ -74,6 +74,11 @@ class PneumoniaMobileNetV3(nn.Module):
         """Predict probability of class
         """
         return torch.sigmoid(predicted_logits)
+    
+    def forward_predict_class(self, images, threshold: float = 0.5):
+        """Predict class label
+        """
+        return (self.predict_proba(self.forward(images)) > threshold).to(torch.get_default_dtype()).view(-1)
 
     def predict_class(self, predicted_logits, threshold: float = 0.5):
         """Predict class label
@@ -82,3 +87,8 @@ class PneumoniaMobileNetV3(nn.Module):
 
     def num_classes(self) -> int:
         return self._num_classes
+
+    def predict_zero_class_proba(self, images):
+        predicted_proba = self.predict_proba(self.forward(images))
+        predicted_zero = 1 - predicted_proba
+        return torch.cat((predicted_zero, predicted_proba), dim=1)
