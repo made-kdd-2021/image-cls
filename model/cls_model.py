@@ -78,7 +78,7 @@ class PneumoniaMobileNetV3(nn.Module):
     def forward_predict_class(self, images, threshold: float = 0.5):
         """Predict class label
         """
-        return (self.predict_proba(self.forward(images)) > threshold).to(torch.long).view(-1)
+        return (self.predict_proba(self.forward(images)) > threshold).to(torch.get_default_dtype()).view(-1)
 
     def predict_class(self, predicted_logits, threshold: float = 0.5):
         """Predict class label
