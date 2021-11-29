@@ -53,11 +53,10 @@ jobs:
       - name: Prepare DVC cache
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.DVC_DATA_SECRET }}
-          DVC_SECRET_FILE: ${{ secrets.DVC_SECRET_FILE }}
         run: |
           cat << EOF > ./.dvc/config.local
           ['remote "storage"']
-            gdrive_service_account_json_file_path = ${{ github.workspace }}/${DVC_SECRET_FILE}
+            gdrive_service_account_json_file_path = /dev/null
           EOF
 
           dvc pull ./data/raw/small-subset-chest_xray.dvc
